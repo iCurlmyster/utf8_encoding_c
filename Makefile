@@ -16,4 +16,4 @@ utf8.o: utf8.c
 	$(CC) $(CFLAGS) utf8.c
 
 clean:
-	rm *.o main
+	rm *.o $(TARGET)
