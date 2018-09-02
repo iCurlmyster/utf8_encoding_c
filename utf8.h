@@ -5,7 +5,9 @@
 #include <string.h>
 #include <wchar.h>
 
-// 
+/**
+ * rune object to store 
+ */
 typedef struct {
     char* bytes;
     size_t len;

@@ -3,36 +3,54 @@
 #include <errno.h>
 #include <string.h>
 #include <locale.h>
+#include <time.h>
 #include "utf8.h"
 
-#define DESC_MAX 100
+rune_array grab_utf8(char *str, int size) {
+    return read_utf8(str, size);
+}
 
 int main() {
     // set locale so unicode shows up in printf
     setlocale(LC_CTYPE, "en_US.UTF-8");
 
     FILE *fp;
-    char desc[DESC_MAX];
-    memset(desc, 0, DESC_MAX);
-    fp = fopen("./test.txt", "rb");
+    fp = fopen("./all_example.txt", "rb");
     if (fp == NULL) {
         perror("could not open file");
         exit(EXIT_FAILURE);
     }
-    fread(desc, sizeof(char), DESC_MAX, fp);
+
+    fseek(fp, 0L, SEEK_END);
+    long file_size = ftell(fp);
+    rewind(fp);
+    char *desc = malloc(file_size * sizeof(char));
+    
+    fread(desc, sizeof(char), file_size, fp);
     fclose(fp);
 
     // Validate UTF8
-    bool success = valid_utf8(desc, DESC_MAX);
+    bool success = valid_utf8(desc, file_size);
     if (success) {
         printf("string is valid utf8!\n");
     } else {
         printf("string is not valid utf8!\n");
     }
 
-    // Grab UTF8 string and print it
-    rune_array ra = read_utf8(desc, DESC_MAX);
+    clock_t start, end;
+    double cpu_time_used;
+    start = clock();
+    rune_array ra;
+    for (int i = 0; i < 50; i++) {
+        ra = grab_utf8(desc, file_size);
+    }
+    end = clock();
+    cpu_time_used = ((double) (end - start)/ CLOCKS_PER_SEC);
+    printf("time taken: %f\n", cpu_time_used);
+
     print_runes_array(&ra);
+
+    free(desc);
     
     return EXIT_SUCCESS;
 }

@@ -89,6 +89,34 @@ rune_array read_utf8(const char *str, size_t len) {
     return runes;
 }
 
+
+
+// rune_array read_utf8(const char *str, size_t len) {
+//     utf8_byte_t cur_t;
+//     int bc = 0;
+//     rune_array runes;
+//     char bytes[4];
+//     if (len <= 0) return runes;
+//     init_runes_array(&runes, len / 2);
+//     for (int i = 0; i < len; ) {
+//         cur_t = byte_type(str[i]);
+//         switch (cur_t) {
+//             case NEXT:
+//             case INVALID:
+//                 return runes;
+//             default:
+//                 bc = handle_bytes(str, i, len, cur_t);
+//                 break;
+//         }
+//         if (bc == -1) {
+//             return runes;
+//         }
+//         insert_rune(&runes, utf8_value(str, i, bc));
+//         i += bc;
+//     }
+//     return runes;
+// }
+
 int handle_bytes(const char *str, int i, size_t len, utf8_byte_t cur_t) {
     char data[4];
     switch (cur_t) {
@@ -176,6 +204,26 @@ void free_runes_array(rune_array *a) {
   a->len = a->cap = 0;
 }
 
+// void init_runes_array(rune_array *a, size_t initialSize) {
+//   a->runes = (wchar_t *)malloc(initialSize * sizeof(wchar_t));
+//   a->len = 0;
+//   a->cap = initialSize;
+// }
+
+// void insert_rune(rune_array *a, wchar_t element) {
+//   if (a->len == a->cap) {
+//     a->cap += a->cap * .7;
+//     a->runes = (wchar_t *)realloc(a->runes, a->cap * sizeof(wchar_t));
+//   }
+//   a->runes[a->len++] = element;
+// }
+
+// void free_runes_array(rune_array *a) {
+//   free(a->runes);
+//   a->runes = NULL;
+//   a->len = a->cap = 0;
+// }
+
 void print_runes_array(rune_array *a) {
     for (int i = 0; i < a->len; i++) {
         printf("%C", rune_value(a->runes[i]));
@@ -205,6 +253,35 @@ wchar_t rune_value(rune r) {
             b = r.bytes[1] & SIX_FREE_BITS;
             c = r.bytes[2] & SIX_FREE_BITS;
             d = r.bytes[3] & SIX_FREE_BITS;
+            val = (wchar_t) ((a << 18) | (b << 12) | (c << 6) | d);
+            break;
+    }
+    return val;
+}
+
+wchar_t utf8_value(const char *str, int pos, size_t bc) {
+    int a = 0, b = 0, c = 0, d = 0;
+    wchar_t val = 0;
+    switch (bc) {
+        case 1:
+            val = (wchar_t) str[pos];
+            break;
+        case 2:
+            a = str[pos] & FIVE_FREE_BITS;
+            b = str[pos + 1] & SIX_FREE_BITS;
+            val = (wchar_t) ((a << 6) | b);
+            break;
+        case 3:
+            a = str[pos] & FOUR_FREE_BITS;
+            b = str[pos + 1] & SIX_FREE_BITS;
+            c = str[pos + 2] & SIX_FREE_BITS;
+            val = (wchar_t) ((a << 12) | (b << 6) | c);
+            break;
+        case 4:
+            a = str[pos] & THREE_FREE_BITS;
+            b = str[pos + 1] & SIX_FREE_BITS;
+            c = str[pos + 2] & SIX_FREE_BITS;
+            d = str[pos + 3] & SIX_FREE_BITS;
             val = (wchar_t) ((a << 18) | (b << 12) | (c << 6) | d);
             break;
     }
