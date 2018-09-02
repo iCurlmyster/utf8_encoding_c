@@ -2,44 +2,34 @@
 #define UTF8_SIMPLE_HEADER
 
 #include <stdbool.h>
-#include <string.h>
-#include <wchar.h>
+#include <stddef.h>
 
-/**
- * rune object to store 
- */
+// utf8_array is a simple structure that holds an array of 
 typedef struct {
-    char* bytes;
-    size_t len;
-} rune;
-
-//
-typedef struct {
-    rune* runes;
+    wchar_t* bytes;
     size_t len;
     size_t cap;
-} rune_array;
+} utf8_array;
 
 //
-rune_array read_utf8(const char *, size_t);
+utf8_array read_utf8(const char *, size_t);
 
 //
 bool valid_utf8(const char *, size_t);
 
 
 //
-void print_runes_array(rune_array*);
+void print_utf8_array(utf8_array*);
 
 //
-void init_runes_array(rune_array*, size_t);
+void init_utf8_array(utf8_array*, size_t);
 
 //
-void insert_rune(rune_array*, rune);
+void insert_utf8_byte(utf8_array*, wchar_t);
 
 //
-void free_runes_array(rune_array*);
+void free_utf8_array(utf8_array*);
 
-//
-wchar_t rune_value(rune);
+wchar_t utf8_value(const char *, int, size_t);
 
 #endif

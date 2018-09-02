@@ -3,12 +3,7 @@
 #include <errno.h>
 #include <string.h>
 #include <locale.h>
-#include <time.h>
 #include "utf8.h"
-
-rune_array grab_utf8(char *str, int size) {
-    return read_utf8(str, size);
-}
 
 int main() {
     // set locale so unicode shows up in printf
@@ -37,18 +32,8 @@ int main() {
         printf("string is not valid utf8!\n");
     }
 
-    clock_t start, end;
-    double cpu_time_used;
-    start = clock();
-    rune_array ra;
-    for (int i = 0; i < 50; i++) {
-        ra = grab_utf8(desc, file_size);
-    }
-    end = clock();
-    cpu_time_used = ((double) (end - start)/ CLOCKS_PER_SEC);
-    printf("time taken: %f\n", cpu_time_used);
-
-    print_runes_array(&ra);
+    utf8_array ra = read_utf8(desc, file_size);
+    print_utf8_array(&ra);
 
     free(desc);
     
