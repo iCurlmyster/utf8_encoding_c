@@ -10,7 +10,7 @@ int main() {
     setlocale(LC_CTYPE, "en_US.UTF-8");
 
     FILE *fp;
-    fp = fopen("./all_example.txt", "r");
+    fp = fopen("./examples/all_example.txt", "r");
     if (fp == NULL) {
         perror("could not open file");
         exit(EXIT_FAILURE);

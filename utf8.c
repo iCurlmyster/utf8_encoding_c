@@ -27,9 +27,10 @@ typedef enum {
     INVALID
 } utf8_byte_t;
 
-utf8_byte_t byte_type(char c);
-int handle_bytes(const char *str, int i, size_t len, utf8_byte_t cur_t);
-bool check_char_bounds_and_valid_seq(char arr[4], utf8_byte_t t);
+utf8_byte_t byte_type(char);
+int handle_bytes(const char *, int, size_t, utf8_byte_t);
+bool check_char_bounds_and_valid_seq(char[4], utf8_byte_t);
+wchar_t utf8_value(const char *, int, size_t);
 
 //  public functions
 
