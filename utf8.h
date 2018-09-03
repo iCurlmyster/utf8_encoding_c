@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-// utf8_array is a simple structure that holds an array of wchar_t
+// utf8_array is a simple structure to represent a multibyte character array
 // bytes is an array of wchar_t
 // len is the current size of bytes that is used
 // cap is the current potential size of bytes that can be used

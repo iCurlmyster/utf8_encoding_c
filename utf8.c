@@ -31,6 +31,8 @@ utf8_byte_t byte_type(char c);
 int handle_bytes(const char *str, int i, size_t len, utf8_byte_t cur_t);
 bool check_char_bounds_and_valid_seq(char arr[4], utf8_byte_t t);
 
+//  public functions
+
 bool valid_utf8(const char *str, size_t len) {
     utf8_byte_t cur_t;
     int bc = 0;
@@ -76,6 +78,35 @@ utf8_array read_utf8(const char *str, size_t len) {
     }
     return bytes;
 }
+
+
+void init_utf8_array(utf8_array *a, size_t initialSize) {
+  a->bytes = (wchar_t *)malloc(initialSize * sizeof(wchar_t));
+  a->len = 0;
+  a->cap = initialSize;
+}
+
+void insert_utf8_byte(utf8_array *a, wchar_t element) {
+  if (a->len == a->cap) {
+    a->cap += a->cap * .7;
+    a->bytes = (wchar_t *)realloc(a->bytes, a->cap * sizeof(wchar_t));
+  }
+  a->bytes[a->len++] = element;
+}
+
+void free_utf8_array(utf8_array *a) {
+  free(a->bytes);
+  a->bytes = NULL;
+  a->len = a->cap = 0;
+}
+
+void print_utf8_array(utf8_array *a) {
+    for (int i = 0; i < a->len; i++) {
+        printf("%C", a->bytes[i]);
+    }
+}
+
+// private functions
 
 int handle_bytes(const char *str, int i, size_t len, utf8_byte_t cur_t) {
     char data[4];
@@ -141,32 +172,6 @@ bool check_char_bounds_and_valid_seq(char arr[4], utf8_byte_t t) {
             return true;
         default:
             return false;
-    }
-}
-
-void init_utf8_array(utf8_array *a, size_t initialSize) {
-  a->bytes = (wchar_t *)malloc(initialSize * sizeof(wchar_t));
-  a->len = 0;
-  a->cap = initialSize;
-}
-
-void insert_utf8_byte(utf8_array *a, wchar_t element) {
-  if (a->len == a->cap) {
-    a->cap += a->cap * .7;
-    a->bytes = (wchar_t *)realloc(a->bytes, a->cap * sizeof(wchar_t));
-  }
-  a->bytes[a->len++] = element;
-}
-
-void free_utf8_array(utf8_array *a) {
-  free(a->bytes);
-  a->bytes = NULL;
-  a->len = a->cap = 0;
-}
-
-void print_utf8_array(utf8_array *a) {
-    for (int i = 0; i < a->len; i++) {
-        printf("%C", a->bytes[i]);
     }
 }
 

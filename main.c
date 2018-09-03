@@ -10,7 +10,7 @@ int main() {
     setlocale(LC_CTYPE, "en_US.UTF-8");
 
     FILE *fp;
-    fp = fopen("./all_example.txt", "rb");
+    fp = fopen("./all_example.txt", "r");
     if (fp == NULL) {
         perror("could not open file");
         exit(EXIT_FAILURE);
@@ -27,11 +27,12 @@ int main() {
     // Validate UTF8
     bool success = valid_utf8(desc, file_size);
     if (success) {
-        printf("string is valid utf8!\n");
+        printf("string is valid utf8!\n\n");
     } else {
-        printf("string is not valid utf8!\n");
+        printf("string is not valid utf8!\n\n");
     }
 
+    // read utf8 characters
     utf8_array ra = read_utf8(desc, file_size);
     print_utf8_array(&ra);
 
