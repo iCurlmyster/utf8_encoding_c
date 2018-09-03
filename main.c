@@ -35,6 +35,7 @@ int main() {
     utf8_array ra = read_utf8(desc, file_size);
     print_utf8_array(&ra);
 
+    free_utf8_array(&ra);
     free(desc);
     
     return EXIT_SUCCESS;
