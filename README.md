@@ -13,5 +13,11 @@ files:
 - utf8.c
 
 build:
-- run `make`
-- run `./utf8`
+```bash
+$ make
+```
+
+run:
+```bash
+$ ./utf8
+```
